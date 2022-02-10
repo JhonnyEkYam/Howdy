@@ -32,7 +32,7 @@ export class AuthService {
   
   login(user: User): Observable<AuthResponse> {
     let  observableLoginResponse: Observable<AuthResponse>;
-    try{
+    // try{
       observableLoginResponse = this.httpClient.post(`${this.AUTH_SERVER_ADDRESS}/api/login`, user).pipe(
         tap(async (res: any) => {
           if (res.user) {
@@ -45,9 +45,9 @@ export class AuthService {
             return throwError(error.error);
         })
       );
-    }catch(err) {
-      console.log("[Error al solicitar acceso]", err.message)
-    }
+    // }catch(err) {
+    //   console.log("[Error al solicitar acceso]", err.message)
+    // }
     return observableLoginResponse;
   }
 
