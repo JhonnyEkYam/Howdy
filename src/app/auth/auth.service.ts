@@ -15,7 +15,11 @@ export class AuthService {
   AUTH_SERVER_ADDRESS: string = 'http://localhost:3000';
   authSubject = new BehaviorSubject(false);
 
-  constructor(private httpClient: HttpClient, private storage: Storage) { }
+  constructor(private httpClient: HttpClient, private storage: Storage) { 
+    (async ()=> {
+      await storage.create();
+    })()
+  }
 
   signUp(userData: any): Observable<AuthResponse> {
     return this.httpClient.post<AuthResponse>(`${this.AUTH_SERVER_ADDRESS}/api/register`, userData.value).pipe(
@@ -34,10 +38,12 @@ export class AuthService {
     let  observableLoginResponse: Observable<AuthResponse>;
     // try{
       observableLoginResponse = this.httpClient.post(`${this.AUTH_SERVER_ADDRESS}/api/login`, user).pipe(
-        tap(async (res: any) => {
-          if (res.user) {
-            await this.storage.set("ACCESS_TOKEN", res.user.access_token);
-            await this.storage.set("EXPIRES_IN", res.user.expires_in);
+        tap(async (res: AuthResponse) => {
+          if (res.data) {
+            console.log(res)
+            console.log(res.data)
+            await this.storage.set("ACCESS_TOKEN", res.data._access_token);
+            await this.storage.set("EXPIRES_IN", res.data._expires_in);
             this.authSubject.next(true);
           }
         }),

@@ -20,7 +20,6 @@ export class SignInPage implements OnInit {
   async login(formData: any){
     try {
       this.authService.login(formData.value).subscribe((res)=>{
-        console.log(res)
         this.router.navigateByUrl('home');
       }, error => {
           this.errorToast.presentToast({message: "Credenciales inválidas", duration: 1000})
