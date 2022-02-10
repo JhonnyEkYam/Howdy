@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
+import { httpInterceptorProviders } from './interceptors/auth.interceptor';
+import { Storage } from '@ionic/storage-angular';
+import { Drivers } from '@ionic/storage';
 
 const routes: Routes = [
   {
@@ -25,6 +28,26 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    httpInterceptorProviders
+  ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+  private storage: Storage;
+  constructor(private router: Router) {
+    (async ()=> {
+      try{
+        this.storage = new Storage({
+          name: '__authcredentials',
+          driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+        })
+        await this.storage.create()
+        let __ACCESS_TOKEN = await this.storage.get('ACCESS_TOKEN')
+        if(__ACCESS_TOKEN === null) router.navigateByUrl('sign-in');
+      } catch (error) {
+        router.navigateByUrl('sign-in')
+      }
+    })()
+  }
+}

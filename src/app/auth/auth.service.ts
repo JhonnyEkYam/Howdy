@@ -6,18 +6,22 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { Storage } from '@ionic/storage-angular';
 import { User } from './user';
 import { AuthResponse } from './auth-response';
+import { Drivers } from '@ionic/storage';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
+
 export class AuthService {
   AUTH_SERVER_ADDRESS: string = 'http://localhost:3000';
   authSubject = new BehaviorSubject(false);
-
-  constructor(private httpClient: HttpClient, private storage: Storage) { 
+  private storage: Storage;
+  constructor(private httpClient: HttpClient) { 
     (async ()=> {
-      await storage.create();
+      this.storage = new Storage({
+        name: '__authcredentials',
+        driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+      })
+      await this.storage.create();
     })()
   }
 
