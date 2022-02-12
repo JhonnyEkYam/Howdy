@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, Route, Router, RouterModule, Routes, UrlSegment } from '@angular/router';
 import { httpInterceptorProviders } from './interceptors/auth.interceptor';
 import { Storage } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
+// Guards
+import { AuthGuardGuard } from './guards/auth-guard.guard'
+
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    canLoad: [AuthGuardGuard],
   },
   {
     path: '',
@@ -28,9 +32,10 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule],
+  exports: [RouterModule, AuthGuardGuard],
   providers: [
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    AuthGuardGuard
   ]
 })
 export class AppRoutingModule {
