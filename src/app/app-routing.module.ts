@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
 // Guards
 import { AuthGuardGuard } from './guards/auth-guard.guard'
-
+import { IsAuthGuard } from './guards/is-auth.guard'
 
 const routes: Routes = [
   {
@@ -19,23 +19,43 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'sign-in',
-    loadChildren: () => import('./auth/sign-in/sign-in.module').then( m => m.SignInPageModule)
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        loadChildren: () => import('./auth/sign-in/sign-in.module').then( m => m.SignInPageModule)
+      },
+      {
+        path: 'register',
+        loadChildren: () => import('./auth/sign-up/sign-up.module').then( m => m.SignUpPageModule)
+      },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      }
+    ],
+    canActivateChild: [IsAuthGuard]
   },
-  {
-    path: 'sign-up',
-    loadChildren: () => import('./auth/sign-up/sign-up.module').then( m => m.SignUpPageModule)
-  },
+  // {
+  //   path: 'sign-in',
+  //   loadChildren: () => import('./auth/sign-in/sign-in.module').then( m => m.SignInPageModule)
+  // },
+  // {
+  //   path: 'sign-up',
+  //   loadChildren: () => import('./auth/sign-up/sign-up.module').then( m => m.SignUpPageModule)
+  // },
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
-  exports: [RouterModule, AuthGuardGuard],
+  exports: [RouterModule, AuthGuardGuard, IsAuthGuard],
   providers: [
     httpInterceptorProviders,
-    AuthGuardGuard
+    AuthGuardGuard,
+    IsAuthGuard
   ]
 })
 export class AppRoutingModule {
@@ -49,9 +69,9 @@ export class AppRoutingModule {
         })
         await this.storage.create()
         let __ACCESS_TOKEN = await this.storage.get('ACCESS_TOKEN')
-        if(__ACCESS_TOKEN === null) router.navigateByUrl('sign-in');
+        if(__ACCESS_TOKEN === null) router.navigateByUrl('auth/login');
       } catch (error) {
-        router.navigateByUrl('sign-in')
+        router.navigateByUrl('auth/login')
       }
     })()
   }

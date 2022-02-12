@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardGuard implements CanLoad {
+export class IsAuthGuard implements CanActivateChild {
   constructor(private router: Router) { }
-  canLoad(
-    route: Route,
-    segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivateChild(
+    childRoute: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return (async () => {
       let isAuth: boolean;
       try {
-        if (await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN)) isAuth = true;
-        else {
+        if (await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN)) {
           isAuth = false;
-          await this.router.navigateByUrl('auth/login');
+          await this.router.navigateByUrl('home');
+        } else {
+          isAuth = true;
         }
       } catch (error) {
         isAuth = false;
