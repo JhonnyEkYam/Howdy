@@ -51,14 +51,8 @@ export class StorageService {
 
   static async getAuthKeysAsArray(): Promise<string[]> {
     let authKeysArray: string[] = [];
-    for ( let authKey in this.config.authKeys) authKeysArray.push(authKey)
+    for (let authKey in this.config.authKeys) authKeysArray.push(authKey)
     console.log(authKeysArray)
     return authKeysArray;
-  }
-
-  static getAuthToken(): string {
-    let result: string = "No session";
-    Promise.resolve(this.getValue(this.config.authKeys.__ACCESS_TOKEN)).then((authToken=>result=authToken));
-    return result;
   }
 }

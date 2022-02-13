@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, Router, RouterModule, Routes, } from '@angular/router';
-import { httpInterceptorProviders } from './interceptors/auth.interceptor';
+// import { httpInterceptorProviders } from './interceptors/auth.interceptor';
 // Guards
 import { AuthGuardGuard } from './guards/auth-guard.guard'
 import { IsAuthGuard } from './guards/is-auth.guard'
@@ -44,7 +44,7 @@ const routes: Routes = [
   ],
   exports: [RouterModule, AuthGuardGuard, IsAuthGuard],
   providers: [
-    httpInterceptorProviders,
+    // httpInterceptorProviders,
     AuthGuardGuard,
     IsAuthGuard
   ]

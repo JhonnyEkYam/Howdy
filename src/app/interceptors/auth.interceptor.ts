@@ -10,10 +10,10 @@ class AuthInterceptor implements HttpInterceptor {
     constructor(private router: Router) {}
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         try {
-            let __authToken = StorageService.getAuthToken();
+            let __authToken = StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN);
             const newReq = req.clone({
                 setHeaders: {
-                    'Authorization': __authToken,
+                    'Authorization': "__authToken",
                 },
             })
             return next.handle(newReq);

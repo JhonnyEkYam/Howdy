@@ -11,8 +11,10 @@ import { StorageService } from '../storage/storage.service';
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
+  
   AUTH_SERVER_ADDRESS: string = 'http://localhost:3000';
   authSubject = new BehaviorSubject(false);
+
   constructor(private httpClient: HttpClient) { }
 
   signUp(userData: any): Observable<AuthResponse> {
