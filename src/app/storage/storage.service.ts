@@ -44,7 +44,7 @@ export class StorageService {
     keys.forEach(key => { this.storage.remove(key) })
   }
 
-  static async getValue(key: string) {
+  static async getValue(key: string): Promise<string> {
     await this.getStorage();
     return this.storage.get(key);
   }
@@ -54,5 +54,11 @@ export class StorageService {
     for ( let authKey in this.config.authKeys) authKeysArray.push(authKey)
     console.log(authKeysArray)
     return authKeysArray;
+  }
+
+  static getAuthToken(): string {
+    let result: string = "No session";
+    Promise.resolve(this.getValue(this.config.authKeys.__ACCESS_TOKEN)).then((authToken=>result=authToken));
+    return result;
   }
 }

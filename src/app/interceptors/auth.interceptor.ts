@@ -7,18 +7,20 @@ import { StorageService } from "../storage/storage.service";
 @Injectable()
 
 class AuthInterceptor implements HttpInterceptor {
-    private authToken: string;
-    constructor(private router: Router) {
-        (async () => {
-            this.authToken = await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN)
-        })()
-    }
+    constructor(private router: Router) {}
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // const authReq = req.clone({
-        //     headers: req.headers.set('Authorization', this.authToken)
-        // })
-        // return next.handle(authReq);
-        return next.handle(req)
+        try {
+            let __authToken = StorageService.getAuthToken();
+            const newReq = req.clone({
+                setHeaders: {
+                    'Authorization': __authToken,
+                },
+            })
+            return next.handle(newReq);
+        } catch (err) {
+            debugger
+            console.log(err.message)
+        }
     }
 }
 
