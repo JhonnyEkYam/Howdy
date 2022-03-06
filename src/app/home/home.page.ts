@@ -7,6 +7,12 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  activeTab: string ='chats'
+  constructor() {7
+  }
+ 
+  segmentChange(e){
+    this.activeTab = e.target.value;
+  }
 
 }
