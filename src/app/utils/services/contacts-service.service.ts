@@ -19,15 +19,25 @@ export class ContactsServiceService {
     return this.httpClient.get<ContactsResponse>(`${this.AUTH_SERVER_ADDRESS}/api/users`, {
       headers: {
         Authorization: authToken,
-        Identidad: "Jonathan2"
+        Identidad: "dev"
       }
     }).pipe(
       map((data: ContactsResponse)=>{
         return data;
       }),
       catchError((err, caught)=>{
+        console.log(err.message)
         return throwError(err.message);
       })
     )
+  }
+
+  getMessages(authToken: string, to: string): Observable<any> {
+    return this.httpClient.get<ContactsResponse>(`${this.AUTH_SERVER_ADDRESS}/messages`, {
+      headers: {
+        Authorization: authToken,
+        'to': to
+      },
+    })
   }
 }

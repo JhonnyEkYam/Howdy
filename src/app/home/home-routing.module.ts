@@ -16,8 +16,8 @@ const routes: Routes = [
     component: HomePage, // Aqui va el componente de lista de chats
   },
   {
-    path: 'chat',
-    component: HomePage, // Aqui va el componente de un chat con un usuario
+    path: 'chat/:user_id',
+    loadChildren: () => import('../conversation-page/conversation-page-routing.module').then(m => m.ConversationPagePageRoutingModule),
   }
 ];
 

@@ -12,13 +12,16 @@ export class HomePage implements OnInit {
   constructor(private contacsService: ContactsServiceService) {
     this.listContacts();
   }
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
   async listContacts() {
-    return this.contacsService.getContacts(await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN))
-      .subscribe((response) => {
-        this.contacts = response.data;
-      })
+    return this.contacsService.getContacts(
+      await StorageService.getValue(
+        StorageService.config.authKeys.__ACCESS_TOKEN
+      )
+    ).subscribe((response) => {
+      this.contacts = response.data;
+      console.log(this.contacts);
+    })
   }
   activeTab: string = 'chats'
 

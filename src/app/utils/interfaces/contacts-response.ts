@@ -4,6 +4,7 @@ interface Contact {
     account: string;
 }
 export interface ContactsResponse {
-    data: any;
+    data?: any;
     ok: boolean;
+    error?: string;
 }

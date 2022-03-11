@@ -13,7 +13,7 @@ class AuthInterceptor implements HttpInterceptor {
             let __authToken = StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN);
             const newReq = req.clone({
                 setHeaders: {
-                    'Authorization': "__authToken",
+                    'Authorization': ''+__authToken
                 },
             })
             return next.handle(newReq);

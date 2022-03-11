@@ -39,113 +39,18 @@
                 <ion-icon name="search-sharp"></ion-icon>
             </div>
             <div class="chats">
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
+                <ion-item *ngFor="let contact of contacts" class="recent-contac" lines="none" [routerLink]="'/home/chat/'+contact.user_id">
                     <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/300" alt="">
+                        <img [src]="'https://i.pravatar.cc/'+40+contact.user_id" alt="">
                     </ion-avatar>
                     <ion-label class="ion-text-nowrap">
-                        <h2>Jorge</h2>
-                        <p>Hola :v...</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <p>2:13</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/320" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>Luis</h2>
-                        <p>Unas cheves</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <p>6:00</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/310" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>Eduardo</h2>
-                        <p>Unas partidas o que ?</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <p>5:40</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/302" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>Daniel</h2>
-                        <p>Que onda :v</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <p>2:03</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/340" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>El de los tacos</h2>
-                        <p>Serían $500 pesos</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <p>8:50</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/350" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>El pana rabbit 🐰</h2>
-                        <p>Saca las zanahorias</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <ion-badge>1</ion-badge>
-                        <p>5:13</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/330" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>Ivan</h2>
-                        <p>¿Había tarea?</p>
-                    </ion-label>
-                    <div class="info-div">
-                        <ion-badge>1</ion-badge>
-                        <p>10:12</p>
-                    </div>
-
-                </ion-item>
-                <ion-item class="recent-contac" lines="none" routerLink="/conversation-page">
-                    <ion-avatar slot="start">
-                        <img src="https://i.pravatar.cc/400" alt="">
-                    </ion-avatar>
-                    <ion-label class="ion-text-nowrap">
-                        <h2>Jonathan
-                        </h2>
-                        <p>La tarea wey</p>
+                        <h2>{{contact.user}}</h2>
+                        <p>{{contact.email}}</p>
                     </ion-label>
                     <div class="info-div">
                         <ion-icon name="checkmark-done-outline"></ion-icon>
-                        <p>3:25</p>
+                        <p>{{contact.role}}</p>
                     </div>
-
                 </ion-item>
             </div>
         </div>
