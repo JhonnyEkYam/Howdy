@@ -11,9 +11,9 @@ import { ContactsServiceService } from '../../utils/services/contacts-service.se
 })
 export class ChatPage implements OnInit {
   messages: any[] = [];
-  from: string = '0';
+  to: string = '0';
   activeTab: string = 'chats';
-
+  content: string = '';
   constructor(
     private contacsService: ContactsServiceService,
     private route: ActivatedRoute
@@ -21,8 +21,8 @@ export class ChatPage implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
-      this.from = data['data']['params'].user_id;
-      this.getMessages(this.from);
+      this.to = data['data']['params'].user_id;
+      this.getMessages(this.to);
     });
   }
 
@@ -39,16 +39,23 @@ export class ChatPage implements OnInit {
       });
   }
 
+  async sendMessage(message: string, to: string) {
+    this.contacsService.sendMessage(
+      await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN),
+      to,
+      message
+    ).subscribe((response) => {
+      console.log('Respuesta:', response)
+      this.messages.push(response.data);
+      this.content = '';
+    })
+  }
 
   haveMessages(): boolean { return this.messages.length > 0}
 
-  sendMessage(message: string) {
-    console.log('hola soy un mensaje', message);
-  }
-
   submitForm(rawForm: NgForm) {
     if (rawForm.form.valid) {
-      this.sendMessage(rawForm.form.value.message);
+      this.sendMessage(rawForm.form.value.message, this.to);
     } else alert('No puedes enviar un mensaje vacío');
   }
   

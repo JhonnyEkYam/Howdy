@@ -25,7 +25,7 @@
         <div
           *ngFor="let message of messages"
           class="messages"
-          [ngClass]="{'yours':message.from==from, 'mine':message.from != from}"
+          [ngClass]="{'yours':message.from==to, 'mine':message.from != to}"
         >
           <div class="message">{{message.content}}</div>
           <span>{{message.updatedAt | date: 'shortTime'}}</span>
@@ -55,6 +55,7 @@
         placeholder="Escribe tu mensaje"
         ngModel
         required
+        [(ngModel)]="content"
       />
       <button type="submit" class="send-button">
         <ion-icon name="send-sharp"></ion-icon>
