@@ -17,8 +17,9 @@ const routes: Routes = [
   },
   {
     path: 'chat/:user_id',
-    loadChildren: () => import('../conversation-page/conversation-page-routing.module').then(m => m.ConversationPagePageRoutingModule),
+    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
   }
+
 ];
 
 @NgModule({

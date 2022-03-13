@@ -58,7 +58,7 @@ ion-content {
         border-top-right-radius: 38px;
         .chat-section {
             height: calc(100% - 90px);
-            overflow: scroll;
+            overflow-y: auto;
             .chat {
                 display: flex;
                 flex-direction: column;
@@ -180,12 +180,14 @@ ion-content {
             width: 90vw;
             left: 50%;
             margin-left: -45vw;
-            ion-input {
-                border: 1 solid #ddd;
-                background: #ddd;
+            .message-content {
+                border: none;
+                padding: .4rem;
+                background: #444;
                 border-radius: 20px;
                 height: 48px;
                 --padding-start: 20px;
+                flex: 1;
             }
             .send-button {
                 margin-left: 20px;

@@ -6,7 +6,6 @@ import { AuthGuardGuard } from './guards/auth-guard.guard'
 import { IsAuthGuard } from './guards/is-auth.guard'
 import { StorageService } from './storage/storage.service';
 import { Storage } from '@ionic/storage-angular';
-import { Drivers } from '@ionic/storage';
 
 const routes: Routes = [
   {

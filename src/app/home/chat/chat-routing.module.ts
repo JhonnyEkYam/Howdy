@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RouteResolverService } from '../utils/services/route-resolver.service';
+import { RouteResolverService } from '../../utils/services/route-resolver.service';
 
-import { ConversationPagePage } from './conversation-page.page';
+import { ChatPage } from './chat.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ConversationPagePage,
+    component: ChatPage,
     resolve: {
       data: RouteResolverService
     }
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ConversationPagePageRoutingModule {}
+export class ChatPageRoutingModule {}
