@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { WsService } from '../../utils/ws.service';
 import { StorageService } from '../../storage/storage.service';
 import { ContactsServiceService } from '../../utils/services/contacts-service.service';
 
@@ -16,14 +17,21 @@ export class ChatPage implements OnInit {
   content: string = '';
   constructor(
     private contacsService: ContactsServiceService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private wsService: WsService
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.to = data['data']['params'].user_id;
       this.getMessages(this.to);
     });
+
+    // connect to socket io
+    this.wsService.listen('test').subscribe(data => {
+      console.log('tests', data)
+    })
   }
 
   async getMessages(from: string) {
@@ -48,6 +56,7 @@ export class ChatPage implements OnInit {
       console.log('Respuesta:', response)
       this.messages.push(response.data);
       this.content = '';
+      this.wsService.emit('saludo', {message: 'Hola que tal'});
     })
   }
 

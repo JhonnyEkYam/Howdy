@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
 import { ContactsServiceService } from '../utils/services/contacts-service.service';
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,19 +13,20 @@ export class HomePage implements OnInit {
   }
   ngOnInit(): void { }
   async listContacts() {
-    return this.contacsService.getContacts(
-      await StorageService.getValue(
-        StorageService.config.authKeys.__ACCESS_TOKEN
+    return this.contacsService
+      .getContacts(
+        await StorageService.getValue(
+          StorageService.config.authKeys.__ACCESS_TOKEN
+        )
       )
-    ).subscribe((response) => {
-      this.contacts = response.data;
-      console.log(this.contacts);
-    })
+      .subscribe((response) => {
+        this.contacts = response.data;
+        console.log(this.contacts);
+      });
   }
-  activeTab: string = 'chats'
+  activeTab: string = 'chats';
 
   segmentChange(e) {
     this.activeTab = e.target.value;
   }
-
 }
