@@ -19,8 +19,7 @@ export class ChatPage implements OnInit {
     private contacsService: ContactsServiceService,
     private route: ActivatedRoute,
     private wsService: WsService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
@@ -29,8 +28,13 @@ export class ChatPage implements OnInit {
     });
 
     // connect to socket io
-    this.wsService.listen('test').subscribe(data => {
-      console.log('tests', data)
+    this.wsService.listen('test').subscribe((data) => {
+      console.log('tests', data);
+    });
+
+    this.wsService.listen('newMessage').subscribe((message)=> {
+      console.log('Este mensaje ha sido recibido via ws: ', message)
+      this.messages.push(message);
     })
   }
 
@@ -48,32 +52,42 @@ export class ChatPage implements OnInit {
   }
 
   async sendMessage(message: string, to: string) {
-    this.contacsService.sendMessage(
-      await StorageService.getValue(StorageService.config.authKeys.__ACCESS_TOKEN),
-      to,
-      message
-    ).subscribe((response) => {
-      console.log('Respuesta:', response)
-      this.messages.push(response.data);
-      this.content = '';
-      this.wsService.emit('saludo', {message: 'Hola que tal'});
-    })
+    this.contacsService
+      .sendMessage(
+        await StorageService.getValue(
+          StorageService.config.authKeys.__ACCESS_TOKEN
+        ),
+        to,
+        message
+      )
+      .subscribe((response) => {
+        console.log('El mensaje fue añadido a la base de datos', response);
+        this.messages.push(response.data);
+        this.content = '';
+        console.log("notificando via websocket")
+        this.wsService.emit('saludo', {
+          data: response.data,
+          message: 'Hola que tal',
+        });
+      });
   }
 
-  haveMessages(): boolean { return this.messages.length > 0}
+  haveMessages(): boolean {
+    return this.messages.length > 0;
+  }
 
   submitForm(rawForm: NgForm) {
     if (rawForm.form.valid) {
       this.sendMessage(rawForm.form.value.message, this.to);
     } else alert('No puedes enviar un mensaje vacío');
   }
-  
+
   ionViewWillEnter() {
     let chatSection = document.getElementById('chat');
     chatSection.scrollTop = chatSection.scrollHeight;
   }
-  
-  segmentChange(e: { target: { value: string; }; }) {
+
+  segmentChange(e: { target: { value: string } }) {
     this.activeTab = e.target.value;
   }
 }
