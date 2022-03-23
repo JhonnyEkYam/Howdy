@@ -12,9 +12,8 @@ export class WsService {
   readonly url = '';
   constructor() {
     this.wsClient = io(this.ws_server);
-    console.log('conectado', this.wsClient);
   }
-
+  client() {return this.wsClient}
   listen(eventName: any) {
     return new Observable((subscriber) => {
       this.wsClient.on(eventName, (data) => {

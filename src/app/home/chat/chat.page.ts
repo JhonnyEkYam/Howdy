@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { WsService } from '../../utils/ws.service';
 import { StorageService } from '../../storage/storage.service';
 import { ContactsServiceService } from '../../utils/services/contacts-service.service';
+import { User } from 'src/app/auth/user';
 
 @Component({
   selector: 'app-chat',
@@ -11,6 +12,8 @@ import { ContactsServiceService } from '../../utils/services/contacts-service.se
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
+  account: any;
+  onlineUsers: any = [];
   messages: any[] = [];
   to: string = '0';
   activeTab: string = 'chats';
@@ -22,20 +25,26 @@ export class ChatPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
+    this.route.data.subscribe(async (data) => {
       this.to = data['data']['params'].user_id;
-      this.getMessages(this.to);
+      this.getMessages(this.to)
     });
 
-    // connect to socket io
-    this.wsService.listen('test').subscribe((data) => {
-      console.log('tests', data);
+    this.wsService.listen('nuevo-mensaje').subscribe((mensaje) => {
+      this.messages.push(mensaje);
     });
 
-    this.wsService.listen('newMessage').subscribe((message)=> {
-      console.log('Este mensaje ha sido recibido via ws: ', message)
-      this.messages.push(message);
-    })
+    this.wsService.listen('newUser').subscribe((usuario) => {
+      this.onlineUsers.push(usuario);
+    });
+
+    this.wsService.listen('userOut').subscribe((usuario: any) => {
+      this.onlineUsers.map((online, index) => {
+        if (online.token == usuario.token) {
+          this.onlineUsers.splice(index, 1);
+        }
+      });
+    });
   }
 
   async getMessages(from: string) {
@@ -48,6 +57,7 @@ export class ChatPage implements OnInit {
       )
       .subscribe((response) => {
         this.messages = response.data;
+        this.wsService.emit('login', JSON.stringify(response.extra))
       });
   }
 
@@ -61,14 +71,9 @@ export class ChatPage implements OnInit {
         message
       )
       .subscribe((response) => {
-        console.log('El mensaje fue añadido a la base de datos', response);
         this.messages.push(response.data);
         this.content = '';
-        console.log("notificando via websocket")
-        this.wsService.emit('saludo', {
-          data: response.data,
-          message: 'Hola que tal',
-        });
+        this.wsService.emit('nuevo-mensaje', response.data);
       });
   }
 

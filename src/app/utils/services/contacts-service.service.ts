@@ -13,7 +13,14 @@ export class ContactsServiceService {
   AUTH_SERVER_ADDRESS: string = 'http://localhost:3000';
   authSubject = new BehaviorSubject(false);
   constructor(private httpClient: HttpClient) {}
-
+  getAccount(authToken: string): Observable<any> {
+    return this.httpClient.get(`${this.AUTH_SERVER_ADDRESS}/api/account`, {
+      headers: {
+        Authorization: authToken,
+        Identidad: 'dev'
+      }
+    })
+  }
   getContacts(authToken: string): Observable<any> {
     return this.httpClient
       .get<ContactsResponse>(`${this.AUTH_SERVER_ADDRESS}/api/users`, {
