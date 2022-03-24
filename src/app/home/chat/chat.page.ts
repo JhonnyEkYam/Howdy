@@ -16,6 +16,7 @@ export class ChatPage implements OnInit {
   onlineUsers: any = [];
   messages: any[] = [];
   to: string = '0';
+  user: User = {};
   activeTab: string = 'chats';
   content: string = '';
   constructor(
@@ -27,7 +28,7 @@ export class ChatPage implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe(async (data) => {
       this.to = data['data']['params'].user_id;
-      this.getMessages(this.to)
+      this.getMessages(this.to);
     });
 
     this.wsService.listen('nuevo-mensaje').subscribe((mensaje) => {
@@ -48,6 +49,12 @@ export class ChatPage implements OnInit {
   }
 
   async getMessages(from: string) {
+    this.wsService.emit(
+      'login',
+      await StorageService.getValue(
+        StorageService.config.authKeys.__ACCESS_TOKEN
+      )
+    );
     return this.contacsService
       .getMessages(
         await StorageService.getValue(
@@ -57,7 +64,8 @@ export class ChatPage implements OnInit {
       )
       .subscribe((response) => {
         this.messages = response.data;
-        this.wsService.emit('login', JSON.stringify(response.extra))
+        this.user = response.extra;
+        console.log('response.extra', response.extra);
       });
   }
 
@@ -73,7 +81,8 @@ export class ChatPage implements OnInit {
       .subscribe((response) => {
         this.messages.push(response.data);
         this.content = '';
-        this.wsService.emit('nuevo-mensaje', response.data);
+        let emitedData = {msg: response.data, user: this.user}
+        this.wsService.emit('nuevo-mensaje', emitedData);
       });
   }
 
