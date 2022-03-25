@@ -1,20 +1,62 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border" mode="ios">
+    <ion-toolbar class="ion-padding">
+        <ion-icon name="menu-outline" slot="start"></ion-icon>
+        <ion-title>
+            Chat
+        </ion-title>
+        <ion-icon name="camera-outline" slot="end"></ion-icon>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+    <div class="tabs ion-padding">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+        <ion-segment value="chats" (ionchange)="segmentChange($event)">
+            <ion-segment-button value="chats">
+                <ion-label>
+                    Chats
+                </ion-label>
+
+            </ion-segment-button>
+            <ion-segment-button value="status">
+                <ion-label>
+                    Status
+                </ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="calls">
+                <ion-label>
+                    Calls
+                </ion-label>
+            </ion-segment-button>
+
+        </ion-segment>
+    </div>
+    <div class="chat-list" *ngIf="activeTab == 'chats'">
+        <div class="recent-chats ion-padding">
+
+            <div class="heading">
+                <h1>Recents Chats</h1>
+                <ion-icon name="search-sharp"></ion-icon>
+            </div>
+            <div class="chats">
+                <ion-item *ngFor="let contact of contacts" class="recent-contac" lines="none" [routerLink]="'/home/chat/'+contact.user_id">
+                    <ion-avatar slot="start">
+                        <img [src]="'https://i.pravatar.cc/'+40+contact.user_id" alt="">
+                    </ion-avatar>
+                    <ion-label class="ion-text-nowrap">
+                        <h2>{{contact.user}}</h2>
+                        <p>{{contact.email}}</p>
+                    </ion-label>
+                    <div class="info-div">
+                        <ion-icon name="checkmark-done-outline"></ion-icon>
+                        <p>{{contact.role}}</p>
+                    </div>
+                </ion-item>
+            </div>
+        </div>
+
+    </div>
+    <ion-fab-button>
+        <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+    </ion-fab-button>
 </ion-content>

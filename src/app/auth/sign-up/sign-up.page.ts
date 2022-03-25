@@ -17,7 +17,7 @@ export class SignUpPage implements OnInit {
 
   signUp(userData: any) {
     this.authService.signUp(userData).subscribe((res: any) => {
-      this.router.navigateByUrl('sign-in');
+      this.router.navigateByUrl('auth/login');
     });
   }
 

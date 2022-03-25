@@ -1,0 +1,65 @@
+<ion-content>
+  <div class="header ion-padding">
+    <div class="info">
+      <iont-item [routerLink]="'/home'" style="z-index: 1000">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        regresar
+      </iont-item>
+      <ion-avatar>
+        <img src="https://i.pravatar.cc/243" alt="" />
+      </ion-avatar>
+      <span class="details">
+        <h1>{{user.user}}</h1>
+        <p>Online</p>
+      </span>
+    </div>
+    <div class="calling">
+      <ion-icon name="videocam-outline"></ion-icon>
+      <ion-icon name="call-outline"></ion-icon>
+    </div>
+  </div>
+
+  <div class="conversation ion-padding">
+    <div class="chat-section" id="chat">
+      <div class="chat" *ngIf="haveMessages() else nomessages">
+        <div
+          *ngFor="let message of messages"
+          class="messages"
+          [ngClass]="{'yours':message.from==to, 'mine':message.from != to}"
+        >
+          <div class="message">{{message.content}}</div>
+          <span>{{message.updatedAt | date: 'shortTime'}}</span>
+        </div>
+      </div>
+
+      <ng-template #nomessages>
+        <div
+          class="chat"
+          style="
+            color: black;
+            height: 100%;
+            text-align: center;
+            font-size: 1.4rem;
+          "
+        >
+          No hay mensajes
+        </div>
+      </ng-template>
+    </div>
+    <form #myform="ngForm" (ngSubmit)="submitForm(myform)" class="message-input">
+      <input
+        class="message-content"
+        type="text"
+        name="message"
+        id="message"
+        placeholder="Escribe tu mensaje"
+        ngModel
+        required
+        [(ngModel)]="content"
+      />
+      <button type="submit" class="send-button">
+        <ion-icon name="send-sharp"></ion-icon>
+      </button>
+    </form>
+  </div>
+</ion-content>
